@@ -1,0 +1,633 @@
+top -> paper
+
+# by David Simmons-Duffin (http://www.physics.harvard.edu/~davidsd)
+# March 2010
+# Changed into NLTK format by F. Moscoso del Prado (Winter, 2014)
+#
+# This grammar is free from context, and also free for you to use
+# however you like, although it's probably not a good idea to try
+# actually submitting any of these to the arXiv.  Feel free to suggest
+# improvements or additions, particularly famous physicists or physics
+# concepts with funny names that I forgot.
+#
+# The code grew organically over several hours, so it may be poorly
+# organized, incomplete, and inconsistent.  Hopefully the output
+# reflects that.
+
+######## Numbers ########
+
+zdigit -> "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+nzdigit -> "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+smallinteger -> nzdigit | nzdigit zdigit | nzdigit zdigit
+n -> "n" | "m" | nzdigit
+
+######## Basic Algebra ########
+
+ring -> "\Z" | "\Q" | "\R" | "\C" | "\mathbb{H}"
+
+group -> liegroup | discretegroup
+liegroup -> "SU(" n ")" | "Sp(" n ")" | "SO(" n ")" | "G_2" | "F_4" | "E_6" | "E_7" | "E_8"
+liegroup -> "Spin(" n ")"
+discretegroup -> "\Z" | "\Z_" n | "\Z^" n | "Hom(" ring "," ring ")" | "H^" n "(" mathspace "," ring ")"
+discretegroup -> "H_" n "(" mathspace "," ring ")" | "Ext^" n "(" ring "," ring ")" | "M_" n "(" ring ")" | "SL_" n "(" ring ")"
+discretegroup -> "Dih_" n
+groupaction -> "orbifold" | "quotient"
+
+######## Spaces ########
+
+space -> pluralspace | singspace | mathspace
+
+singspace -> "a " spacetype | "a " spaceadj " " spacetype | properspacename | spaceadj " " properspacename
+singspace -> mathspace | mathspace
+singspace -> "a " bundletype " bundle over " space | singspace " fibered over " singspace
+singspace -> "the moduli space of " pluralspace | "a " spacetype " " spaceproperty
+singspace -> "the " spacepart " of " space | "a " group " " groupaction " of " singspace
+singspace -> "the near horizon geometry of " singspace
+pluralspace -> spacetype "s" | spaceadj " " spacetype "s" | n " copies of " mathspace | pluralspace " fibered over " space
+pluralspace -> spacetype "s " spaceproperty
+pluralspace -> bundletype " bundles over " space | "moduli spaces of " pluralspace | group " " groupaction "s of " pluralspace
+
+spaceadj -> spaceadj " " spaceadj | "warped" | "squashed" | "non-compact" | "compact"
+spaceadj -> "hyper-Kahler" | "Kahler" | "exotic" | "projective" | "noncommutative" | "fuzzy"
+spaceadj -> "elliptically-fibered" | "spin" | "hyperbolic" | "Einstein" | "Ricci-flat" | "Euclidean"
+spaceadj -> "Minkowskian" | "planar" | "harmonic" | "symplectic" | "ALE" | "ALF"
+spaceproperty -> "of " group " holonomy" | "with " mathadj " " mathobj
+bundletype -> group | "line" | "affine" | mathspace
+spacetype -> "Calabi-Yau " n "-fold" | "Riemann surface" | "manifold" | n "-fold" | n "-manifold"
+spacetype -> "symmetric space" | "K3" | "del-Pezzo" | "Klebanov-Strassler background" | "RS1 background"
+spacetype -> "lens space" | "Hirzebruch surface" | "Enriques surface" | "rational surface" | "ALE fibration"
+spacetype -> "ALF space" | "linear dilaton background" | "Atiyah-Hitchen manifold"
+
+generalspacetype -> "surface" | "line" | "hyperplane" | "hypersurface"
+
+properspacename -> "Anti de Sitter Space" | "de Sitter Space" | "Taub-NUT Space" | "superspace"
+
+mathspace -> "AdS_" n | "S^" n | "R^" n | "CY_" n | "C^" n
+mathspace -> "dS_" n | "T^" n | mathspace " x " mathspace | "P^" n
+
+spacepart -> "boundary" | "conformal boundary" | "null future" | "horizon" | "NUT"
+
+######## More Mathematics ########
+
+mapping -> "function" | "mapping" | "homomorphism" | "homeomorphism" | "isomorphism"
+mapping -> "surjective " mapping | "injective " mapping | "holomorphism"
+mapping -> "biholomorphism" | "isometry"
+
+mathadj -> "trivial" | "nontrivial" | "zero" | "nonzero" | "general" | "discrete" | "abelian"
+mathadj -> "non-abelian" | "equivariant" | symmetry " symmetric"
+mathobj -> "fundamental group" | "cohomology" | "homology" | "torsion" | "monodromy"
+mathobj -> "spin-structure" | "dimension" | "complex-structure" | "flux" | "B-field"
+mathobj -> "H-flux"
+
+representation -> "adjoint" | "symmetric tensor" | "antisymmetric tensor" | "singlet" | "doublet" | "triplet"
+
+######## Theories ########
+
+theory -> singtheory | pluraltheory
+singtheory -> singqft " " theorymodifier | singstringtheory " " theorymodifier
+pluraltheory -> pluralqft " " theorymodifier | pluralstringtheory " " theorymodifier
+
+theorymodifier -> compactified " on " space | "deformed by " operator "s" | "on " space
+theorymodifier -> near " " theoryobj
+compactified -> "living" | "compactified" | "dimensionally reduced" | "supported"
+near -> "in the presence of" | "near" | "surrounded by" | "far from"
+
+qft -> singqft | singqft | singqft | pluralqft
+singqft -> properqft | qftadj " " properqft | properqft " " qftproperty
+singqft -> "a " qftadj " " genericqft
+pluralqft -> qftadj " " genericqft "s"
+
+qftadj -> qftadj " " qftadj | "supersymmetric" | "N=" nzdigit | "adjoint" | "superconformal"
+qftadj -> "conformal" | "extremal" | "chiral" | "topological" | n "-dimensional" | "twisted"
+qftadj -> "topologically twisted" | "deformed" | "perturbative" | "nonperturbative" | "Toda" | "WZW"
+qftproperty -> "with " qftobj
+
+qftobj -> "a " operator | operator "s" | mathadj " superpotential" | mathadj " kahler potential"
+qftobj -> representation " " field "s" | "a " representation " " field
+qftobj -> "gauge group " liegroup | "a " mathadj " deformation" | "a " optype " defect"
+
+genericqft -> "QFT" | "CFT" | "Matrix Model" | "TQFT" | theorytype " Theory"
+theorytype -> "Effective Field" | "Quantum Field" | "Conformal Field" | "Soft-Collinear Effective" | "Topological Field"
+theorytype -> "Heavy Quark Effective" | "low-energy Effective" | "String" | "Yang-Mills" | "Chern-Simons" | "gauge"
+
+properqft -> "QCD" | "QED" | "supergravity" | "unparticle physics"
+
+stringtheory -> singstringtheory | pluralstringtheory
+singstringtheory -> "String Theory" | "F-Theory" | "M-Theory" | "Heterotic string theory"
+singstringtheory -> "Topological String Theory" | "type IIA" | "type IIB"
+pluralstringtheory -> "String theories" | "Heterotic strings" | "type IIA strings" | "type IIB strings"
+pluralstringtheory -> "type I strings" | "topological strings" | "bosonic strings"
+
+######## Physics Objects ########
+
+theoryobj -> singtheoryobj | pluraltheoryobj
+
+singtheoryobj -> "a " bhadj " black hole" | "a " singularityadj " singularity" | "a " branetype " brane " braneaction
+singtheoryobj -> "a stack of " branetype " branes " braneaction | "a " generalspacetype " defect" | "an instanton"
+singtheoryobj -> "an orientifold plane" | "a " branetype " instanton" | "a " branetype " brane probe"
+
+pluraltheoryobj -> " " bhadj " black holes" | singularityadj " singularities"
+pluraltheoryobj -> branetype " branes " braneaction | generalspacetype " defects"
+pluraltheoryobj -> "orientifold planes" | branetype " instantons" | "instantons"
+
+bhadj -> "orientifold" | "BTZ" | "Kerr" | "Reisner-Nordstrom" | "small" | "large"
+bhadj -> "Schwarzschild" | branetype " brane" | "massive" | "extremal"
+
+singularityadj -> "A_" n | "B_" n | "C_" n | "D_" n | "E_6" | "E_7" | "E_8" | "G_2" | "F_4" | "conifold"
+singularityadj -> "conical" | "ADE" | "orbifold" | "du Val" | "Kleinian" | "rational double-point" | "canonical"
+singularityadj -> "exceptional" | physicist
+
+branetype -> "NS5" | "D" nzdigit | "(p,q) 7-" | "(p,q)" | "noncommutative" | "black" | "fractional D" nzdigit
+branetype -> "special lagrangian" | "canonical co-isotropic" | "holomorphic" | "A-type" | "B-type"
+braneaction -> "wrapping a " mathspace | "wrapped on " singspace
+
+operator -> optype " operator" | "Chern-Simons term" | optype " F-term" | "Wilson line" | "'t Hooft line"
+operator -> generalspacetype " operator" | optype " D-term"
+optype -> "primary" | "quasi-primary" | "marginal" | "relevant" | "irrelevant" | "four-quark" | "multi-fermion"
+optype -> "loop" | "local" | "nonlocal" | "BPS"
+
+field -> "boson" | "fermion" | "gauge-field" | n "-form" | "scalar"
+
+objectplace -> "at the center of the galaxy" | "in our solar system" | "on the surface of the sun"
+objectplace -> "at the edge of our universe" | "in the CMB" | "at the LHC" | "at the Tevatron"
+objectplace -> "at SNO" | "at ATLAS" | "in the interstellar medium" | "at DAMA" | "at CDMS"
+objectplace -> "in the early universe" | "during inflation" | "after reheating" | "at the GUT scale"
+objectplace -> "at the weak scale" | "at $\Lambda_{QCD}$" | "at the intermediate scale" | "at the Planck scale"
+
+
+######## Model ########
+
+model -> singmodel | pluralmodel
+
+singmodel -> "a model of " physsubject | "a model for " physsubject | "a " physadj " model " modelmodifier
+singmodel -> "the " propermodel | "the " physadj " " propermodel | physadj " " generalmodel
+singmodel -> inflationadj " inflation" | generalmodel | generalmodel | physicist " " generalmodel
+
+pluralmodel -> "models of " physsubject | physadj " models " modelmodifier | "models of " particle "s"
+
+modelmodifier -> "of " physsubject | "for " physsubject | "with " particle "s"
+propermodel -> "Standard Model" | "MSSM" | nnnn "MSSM" | "Thirring Model" | "Ising Model"
+propermodel -> "XXZ Model" | "O(n) Model" | physicist " Model" | "Landau-Ginzburg Model"
+propermodel -> "A-model" | "B-model"
+nnnn -> "N" | "N" nnnn
+
+generalmodel -> "gravity" | "general relativity" | "RS1" | "RS2" | "technicolor"
+generalmodel -> "gauge mediation" | "anomaly mediation" | properqft
+generalmodel -> dynadjective " mechanics" | dynadjective " dynamics" | "hydrodynamics"
+generalmodel -> "thermodynamics" | "unparticle physics"
+
+dynadjective -> "quantum" | physicist | physadj
+
+######## Adjectives ########
+
+physadj -> physadj " " physadj | "non-" physadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+physadj -> nondescriptivephysadj | descriptivephysadj
+
+nondescriptivephysadj -> 
+nondescriptivephysadj -> "seesaw" | "curvaton" | "hybrid" | "quantum" | "loop" | "cosmon"
+nondescriptivephysadj -> "scalar" | particle | physsubject | "isocurvature" | branetype " brane"
+nondescriptivephysadj -> "condensate" | "three-fluid" | "multi-field" | "variable mass"
+nondescriptivephysadj -> "particle" | "matrix" | "lattice" | "inflaton" | "bulk" | "boundary" | "halo"
+nondescriptivephysadj -> "braneworld" | "GUT" | liegroup | "scalar field" | "RS"
+nondescriptivephysadj -> "flavor" | "Landau-Ginzburg" | "Planck" | physicist | "left-right"
+nondescriptivephysadj -> "large-N" | "parent" | "QCD" | "QED" | "BPS" | "unparticle" | "high-scale" | "low-scale"
+nondescriptivephysadj -> "large mass"
+
+descriptivephysadj -> 
+descriptivephysadj -> "non-gaussian" | "simple" | "inflationary" | inflationadj " inflationary"
+descriptivephysadj -> "exactly-soluble" | "unified" | "minimal" | "quantum" | "linear" | "nonlinear"
+descriptivephysadj -> "gravitational" | "quantum gravitational" | "cosmological" | "supersymmetric"
+descriptivephysadj -> "holographic" | "entropic" | "alternative" | "nonstandard" | "multidimensional"
+descriptivephysadj -> "nonlocal" | "chiral" | "phenomenological" | "nonperturbative" | "perturbative"
+descriptivephysadj -> "warped" | n "-dimensional" | "conformal" | "modified" | "supergravity mediated"
+descriptivephysadj -> "gauge mediated" | "anomaly mediated" | "superconformal" | "extra-ordinary"
+descriptivephysadj -> "general" | "anthropic" | "nilpotent" | "asymmetric" | symmetry " symmetric"
+descriptivephysadj -> symmetry " invariant" | "spontaneous" | "thermodynamic" | "planar" | "inertial"
+descriptivephysadj -> "metastable" | "unstable" | "tachyonic" | "transverse" | "longitudinal"
+descriptivephysadj -> "momentum-dependent" | "exclusive" | "diffractive" | "dynamical" | "effective"
+descriptivephysadj -> "acoustic" | "primordial" | "possible" | "impossible" | "calculable" | "predictive"
+descriptivephysadj -> "unconventional" | "macroscopic" | "microscopic" | "holomorphic"
+descriptivephysadj -> "consistent" | "inconsistent" | "anomalous"
+
+inflationadj -> inflationadj " " inflationadj | inflationadj " " inflationadj
+inflationadj -> inflationadj " " inflationadj | inflationadj " " inflationadj
+inflationadj -> "$D$-Term" | "anisotropic" | "asymptotic" | "brane" | "braneworld chaotic"
+inflationadj -> "Brans-Dicke" | "chaotic" | "cosmological" | "de Sitter" | "double"
+inflationadj -> "dynamical" | "elastic" | "extended" | "extranatural" | "F-term" | "hybrid" | "false vacuum"
+inflationadj -> "first-order" | "general" | "generalized assisted" | "higher-curvature" | "hyper"
+inflationadj -> "inflatonless" | "inspired" | "inverted" | "K" | "large-scale" | "late-time"
+inflationadj -> "mild" | "low scale" | "modular invariant" | "multi-component" | "multi-field stochastic"
+inflationadj -> "multi-field" | "mutated" | "natural" | "new" | "$\Omega<1$" | "assisted" | "brane-assisted"
+inflationadj -> "tachyonic" | "liouville" | "open" | "Cobe-Dmr-normalized" | "D-term" | "dissipative"
+inflationadj -> "supersymmetric" | "eternal" | "extended" | "extreme" | "facilitated" | "warm"
+inflationadj -> "generalized" | "gravitoelectromagnetic" | "holographic" | "induced" | "inhomogeneous"
+inflationadj -> "intermediate" | "kinetic" | "local" | "mass" | "moduli" | "slow-roll" | "multi-scalar"
+inflationadj -> "supergravity" | "natural" | "boundary" | "cosmic" | "dominated" | "early"
+inflationadj -> "exact" | "fake" | "field line" | "fresh" | "gravity driven" | "induced-gravity"
+inflationadj -> "intermediate scale" | "Jordan-Brans-Dicke" | "large field" | "locked"
+inflationadj -> "massive" | "monopole" | "multiple" | "multiple-stage" | "supergravity"
+inflationadj -> "non-slow-roll" | "old" | "particle physics" | "pole-like" | "power-law mass"
+inflationadj -> "precise" | "pseudonatural" | "quasi-open" | "racetrack" | "running-mass"
+inflationadj -> "simple" | "single scalar" | "single-bubble" | "spacetime" | "noncommutative"
+inflationadj -> "standard" | "steady-state" | "successful" | "sunergistic" | "tensor field"
+inflationadj -> "thermal brane" | "tilted ghost" | "topological" | "tsunami" | "unified" | "weak scale"
+inflationadj -> "noise-induced" | "one-bubble" | "open-universe" | "patch" | "polynomial" | "primary"
+inflationadj -> "quadratic" | "quintessential" | "rapid" | "asymmetric" | "scalar-tensor"
+inflationadj -> "non-canonical" | "smooth" | "spin-driven" | "Starobinsky" | "stochastic"
+inflationadj -> "string-forming" | "TeV-scale" | "three form" | "topological defect" | "viable"
+inflationadj -> "weak-dissipative" | "nonminimal" | "oscillating" | "phantom" | "power law"
+inflationadj -> "pre-big-bang" | "primordial" | "quantum" | "R-invariant" | "running"
+inflationadj -> "shear-free" | "rotating" | "slinky" | "spinodal" | "thermal" | "tidal" | "tree-level"
+inflationadj -> "two-stage" | "anthropic"
+
+######## Physicist ########
+
+physicist -> physicistname | physicistname | physicistname "-" physicistname
+physicistname -> 
+physicistname -> "Weinberg" | "Feynman" | "Witten" | "Seiberg" | "Polchinski" | "Intrilligator"
+physicistname -> "Vafa" | "Randall" | "Sundrum" | "Strominger" | "Georgi" | "Glashow" | "Coleman"
+physicistname -> "Bohr" | "Fermi" | "Heisenberg" | "Maldacena" | "Einstein" | "Kachru" | "Arkani-Hamed"
+physicistname -> "Schwinger" | "Higgs" | "Hitchin" | "Hawking" | "Stueckelberg" | "Unruh" | "Aranov-Bohm"
+physicistname -> "'t Hooft" | "Silverstein" | "Horava" | "Lifschitz" | "Beckenstein" | "Planck"
+physicistname -> "Euler" | "Lagrange" | "Maxwell" | "Boltzmann" | "Lorentz" | "Poincare" | "Susskind"
+physicistname -> "Polyakov" | "Gell-Mann" | "Penrose" | "Dyson" | "Dirac" | "Argyres" | "Douglass"
+physicistname -> "Gross" | "Politzer" | "Cabibo" | "Kobayashi" | "Denef" | "Shenker" | "Moore"
+physicistname -> "Nekrosov" | "Gaiotto" | "Motl" | "Strassler" | "Klebanov" | "Nelson" | "Gubser"
+physicistname -> "Verlinde" | "Bogoliubov" | "Schwartz"
+
+######## Concepts ########
+
+mathconcept -> singmathconcept | pluralmathconcept
+
+singmathconcept -> "integrability" | "perturbation theory" | "localization"
+singmathconcept -> "duality" | "chaos" | mathadj " structure" | physicist "'s equation"
+singmathconcept -> "dimensionality" | dualtype "-duality" | "unitarity"
+singmathconcept -> "representation theory" | "Clebsch-Gordon decomposition"
+singmathconcept -> "sheaf cohomology" | "anomaly matching"
+
+pluralmathconcept -> "gerbs" | "path integrals" | "Feynman diagrams" | mathadj " structures"
+pluralmathconcept -> physicist " equations" | physicistname "'s equations" | "conformal blocks"
+pluralmathconcept -> optype " operators" | dualtype "-dualities" | physicist " points" | group " characters"
+pluralmathconcept -> "central charges" | "charges" | "currents" | "representations" | physicist " conditions"
+pluralmathconcept -> "symplectic quotients" | "hyperkahler quotients" | "Nahm's equations" | "vortices"
+pluralmathconcept -> "vortex equations" | "Hilbert schemes" | "integration cycles" | "divisors" | "line bundles"
+pluralmathconcept -> "index theorems" | "flow equations" | "metrics" | "Gromov-Witten invariants"
+pluralmathconcept -> "Gopakumar-Vafa invariants" | "Donaldson polynomials"
+
+physconcept -> pluralphysconcept | singphysconcept
+
+pluralphysconcept -> "examples of " physconcept | "equations of " theory | n "-point correlators"
+pluralphysconcept -> symmetry " algebras" | "fragmentation functions" | "decay constants" | "anomaly constraints"
+pluralphysconcept -> "anomalous dimensions" | "PDFs" | "observables" | "effects of " physconcept | "partition functions"
+pluralphysconcept -> particle " collisions" | physadj " effects" | physadj " parameters" | physadj " hierarchies"
+pluralphysconcept -> physconceptnoun | physadj " " physconceptnoun | "amplitudes" | "scattering amplitudes"
+pluralphysconcept -> "geometric transitions"
+
+singphysconcept -> symmviol " " symmetry " invariance" | symmviol " " symmetry " symmetry"
+singphysconcept -> symmetry " symmetry breaking" | mechanism | "confinement" | "the " physadj " limit"
+singphysconcept -> "the " physadj " law" | "the " symmetry " algebra" | "the beta function"
+singphysconcept -> "the Wilsonian effective action" | "the " n "PI effective action"
+singphysconcept -> "the partition function" | particle " production" | "the effective potential"
+singphysconcept -> "renormalization" | "regularization" | "backreaction" | "AdS/CFT" | "the partition function"
+singphysconcept -> "a " physadj " hierarchy" | "the " physicist " formalism" | "the " physadj " formalism"
+singphysconcept -> physadj " regularization" | "the 't Hooft anomaly matching condition"
+singphysconcept -> "the S-matrix" | "the Hamiltonian" | "the Lagrangian" | "the omega deformation"
+singphysconcept -> "the " physadj " Hilbert space" | "the Hilbert space" | '"' singphysconcept '"'
+singphysconcept -> effect | "the OPE" | "IR behavior" | "UV behavior" | "a warped throat"
+singphysconcept -> "a holographic superconductor" | "the " particle " charge" | "the " particle " gyromagnetic ratio"
+
+physconceptnoun -> "sectors" | "vacua" | "solutions" | "states" | "geometries" | "currents"
+physconceptnoun -> "backgrounds" | "wavefunctions" | "excitations" | "branching ratios" | "amplitudes"
+physconceptnoun -> "decays" | "exotics" | "corrections" | "interactions" | "inhomogeneities"
+physconceptnoun -> "correlation functions"
+
+dualtype -> "T" | "U" | "S" | "magnetic" | "electric" | "gravitational" | "boundary" | "Seiberg" | "Geometric Langlands"
+
+symmviol -> "violation of" | physadj " violation of" | "breaking of"
+symmetry -> "dilation" | "translation" | "rotation" | "Lorentz" | "conformal" | "superconformal"
+symmetry -> "super" | "Poincare" | "worldsheet" | "diffeomorphism" | "superdiffeomorphism" | liegroup
+symmetry -> "dual-superconformal" | "Yangian" | "Virosoro"
+
+mechanism -> "the " mechanismadj " mechanism" | "the " physadj " " mechanismadj " mechanism"
+mechanismadj -> "Higgs" | "seesaw" | physicist | "attractor" | "anomaly inflow" | "reheating"
+mechanismadj -> "SuperHiggs" | "confinement"
+
+effect -> "the " effectadj " effect" | "the " physadj " " effectadj " effect" | physadj " effects"
+effectadj -> physicist | "quantum Hall" | "Unruh" | "Stark" | "Casimir"
+
+######## Subject ########
+
+physsubject -> singphyssubject | pluralphyssubject
+singphyssubject -> 
+singphyssubject -> "quintessence" | inflationadj " inflation" | "inflation" | "dark matter" | "dark energy"
+singphyssubject -> "spacetime foam" | "instanton gas" | "entropy" | "entanglement entropy" | "flavor"
+singphyssubject -> "bubble nucleation"
+
+pluralphyssubject -> 
+pluralphyssubject -> "condensates" | branetype " branes" | "cosmic rays" | "instanton liquids"
+pluralphyssubject -> physadj " fluctuations" | "bubbles"
+
+particle -> "hadron" | "lepton" | "quark" | "neutrino" | "electron" | "positron" | "WIMP"
+particle -> "slepton" | "squark" | "kk graviton" | "gluon" | "W-boson" | "Z-boson" | "neutralino"
+particle -> "chargino" | "ghost" | "axion" | "monopole" | "soliton" | "dion" | "kaon" | "B-meson" | "pion"
+particle -> "heavy-ion" | "Higgs"
+
+subject -> singsubject | pluralsubject
+
+pluralsubject -> pluralmodel | pluraltheoryobj | particle "s"
+pluralsubject -> pluralphysconcept " in " modeltheory
+pluralsubject -> pluralmathconcept " in " theory | mathadj " " pluralmathconcept
+pluralsubject -> pluralphysconcept | pluraltheory | pluralphyssubject " " objectplace
+pluralsubject -> pluraltheoryobj " " objectplace | "some " specific " " examples
+pluralsubject -> pluralmathconcept " on " space
+
+specific -> "specific" | "general" | "particular" | "conspicuous" | "little-known"
+examples -> "cases" | "examples" | "illustrations" | "computations" | "frameworks" | "paradigms"
+
+singsubject -> singmodel | singtheory | singtheoryobj | problem
+singsubject -> solution | studyingverb " " modeltheory
+singsubject -> article " " physadj " " actiondone " of " modeltheory | singphysconcept " in " modeltheory
+singsubject -> singmathconcept " in " theory | mathadj " " singmathconcept
+singsubject -> singphysconcept | "the " actiondone " of " modeltheory
+singsubject -> article " " actiondone " of " mathconcept " in " modeltheory
+singsubject -> "the " correspondent "/" correspondent " correspondence"
+singsubject -> article " " dualtype "-dual of " modeltheory | dualtype "-duality in " modeltheory
+singsubject -> singtheoryobj " " objectplace | singphyssubject " " objectplace
+singsubject -> singsubject " (" including " " subject ")" | singmathconcept " on " space
+singsubject -> singmathconcept | "a certain notion of " singmathconcept
+
+modeltheory -> model | theory
+
+including -> "including" | "excluding" | "involving" | "taking into account"
+
+correspondent -> generalmodel | propermodel | properqft | genericqft | mathspace
+
+solution -> article " solution " solved | article " " soladj " solution " solved
+solution -> article " solution " solved " " via " " subject
+solution -> article " " soladj " solution " solved " " via " " subject
+solution -> "a resolution of " problem | "a " soladj " resolution of " problem
+solution -> "a " soladj " approach to " problem
+solved -> "to " problem | "of " theory
+via -> "via" | "through" | "from" | "by"
+soladj -> "better" | "new" | "beautiful" | "quantum" | "physical" | "old" | "clever"
+soladj -> "minimal" | "non-minimal" | physadj | "anthropic" | "entropic" | "possible"
+soladj -> "probable" | "partial"
+
+problem -> "the " problemtype " problem"
+problemtype -> "hierarchy" | "flavor" | "cosmological constant" | "lithium" | "mu"
+problemtype -> "strong CP" | "naturalness" | "little hierarchy" | "SUSY CP" | "LHC inverse"
+problemtype -> "cosmic coincidence" | "U(1)" | "fine-tuning" | "mu/B_mu" | "confinement"
+
+######## Verbs ########
+
+verb -> "derive" | "obtain" | "deduce" | "discover" | "find"
+verb -> "conjecture" | "check" | "calculate" | "predict"
+verbed -> "derived" | "obtained" | "deduced" | "discovered" | "found" | "conjectured"
+verbed -> "realized" | "checked" | "calculated" | "predicted"
+
+studyverb -> "study" | "solve" | "investigate" | "demystify" | "bound"
+studyverb -> "classify" | "obtain" | "derive" | "generalize" | "explore"
+studyverb -> "examine" | "consider" | "analyze" | "evaluate" | "review"
+studyverb -> "survey" | "explain" | "clarify" | "shed light on"
+studyverb -> "extend" | "construct" | "reconstruct" | "calculate" | "discuss"
+studyverb -> "formulate" | "reformulate" | "understand"
+
+studyingverb -> "studying" | "solving" | "investigating" | "demystifying" | "bounding"
+studyingverb -> "classifying" | "obtaining" | "deriving" | "generalizing" | "exploring"
+studyingverb -> "examining" | "considering" | "analyzing" | "evaluating" | "reviewing"
+studyingverb -> "surveying" | "explaining" | "clarifying" | "formulating" | "reformulating"
+studyingverb -> "extending" | "constructing" | "reconstructing" | "discussing" | "understanding"
+
+studiedverb -> "studied" | "solved" | "investigated" | "demystified" | "bounded"
+studiedverb -> "classified" | "obtained" | "derived" | "generalized" | "explored"
+studiedverb -> "examined" | "considered" | "analyzed" | "evaluated" | "reviewed"
+studiedverb -> "surveyed" | "recalled" | "explained" | "clarified" | "extended" | "constructed"
+studiedverb -> "reconstructed" | "discussed" | "understood"
+
+singbeingverb -> "exists" | "is present" | "must be there" | "must be present" | "does not exist"
+
+revealed -> "revealed" | "produced" | "led to" | "led us to" | "exposed" | "uncovered"
+
+singstatementverb -> "is" | "is equivalent to" | "is related to" | "derives from"
+singstatementverb -> "reduces to" | "follows from" | "lets us " studyverb
+singstatementverb -> "can be interpreted as" | "can be " verbed " from" | "turns out to be equivalent to"
+singstatementverb -> "relates to" | "depends on" | adverb " " singstatementverb
+singstatementverb -> "can be incorporated into" | "can be brought to bear in " studyingverb
+singstatementverb -> "is useful for " studyingverb | "is the final component in " studyingverb
+
+pluralstatementverb -> "are the same as" | "are equivalent to" | "are related to"
+pluralstatementverb -> "let us " studyverb | "can compute" | "follow from" | "can be interpreted as"
+pluralstatementverb -> "can be " verbed " from" | "turn out to be equivalent to" | "relate to" | "depend on"
+pluralstatementverb -> "derive from" | "reduce to" | adverb " " pluralstatementverb
+pluralstatementverb -> "can be incorporated into" | "can be brought to bear in " studyingverb
+pluralstatementverb -> "are useful for " studyingverb | "relate " subject " to"
+
+yields -> "yields" | "gives" | "provides" | "produces" | "gives rise to"
+prove -> "prove" | "show" | "demonstrate" | "establish" | "illustrate" | "determine" | "confirm" | "verify"
+
+contradict -> "contradict" | "disagree with" | "agree with" | "find inconsistencies with" | "argue against"
+contradict -> "run counter to" | "cannot corroborate" | "cannot support" | "challenge" | "fail to " prove
+
+######## Language ########
+
+capital -> "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+
+article -> "a" | "the"
+
+adverb -> "remarkably" | "actually" | "interestingly" | "however" | "moreover" | "therefore" | "thus"
+adverb -> "consequently" | "curiously" | "fortunately" | "unfortunately" | "surprisingly" | "unsurprisingly"
+adverb -> "quite simply" | "in short"
+
+recently -> "recently" | "in recent years" | "in recent papers" | "over the last decade"
+recently -> "in the 20th century" | "among particle physicists" | "among mathematicians"
+
+thereby -> thereby " " thereby | "thereby" | "completely" | "conclusively" | "wholly"
+thereby -> "thoroughly" | "fully" | "ultimately" | "unambiguously"
+
+motivated -> "motivated by this" | "inspired by this" | "continuing in this vein"
+motivated -> "continuing with this program"
+
+assuming -> "if" | "whenever" | "provided that" | "supposing that" | "assuming" | "assuming that"
+assuming -> "as long as" | "given that"
+
+preposition -> "after" | "before" | "while" | "when"
+whenphrase -> preposition " " studyingverb " " subject
+
+actiondone -> "reduction" | "compactification" | "formulation" | "extension" | "solution" | "analytic continuation"
+
+qualifier -> "at least in the context of " subject | "without regard to " subject
+qualifier -> "in the approximation that " statement | "in the limit that " statement
+qualifier -> "as realized in " subject | "as hinted at by " physicist
+qualifier -> "as revealed by " mathconcept | "by " symmetry " symmetry" | "by symmetry"
+qualifier -> "whenever " statement | "as we will see in this paper" | "with the help of " subject
+qualifier -> "as will be made clear" | "as will be " studiedverb " shortly" | "in the " singmathconcept " case"
+
+inorderto -> "to " prove " that " statement | "in order to " prove " that " statement
+inorderto -> "in order to avoid " studyingverb " " subject | "to best " studyverb " " subject
+inorderto -> "to " studyverb " " subject | "to " studyverb " recent results linking " subject " and " subject
+inorderto -> "in a way that " yields " " subject | "to explore questions such as the " singmathconcept " conjecture"
+
+was -> "has been" | "was"
+muchwork -> "much work " was " done" | "interesting progress " was " made"
+muchwork -> "substantial progress has been made" | "minimal progress " was " made"
+muchwork -> "some work " was " done" | "little work " was " done" | "a fair amount of work " was " done"
+muchwork -> "partial progress " was " made"
+
+test -> computation | "test" | "probe" | "measurement" | "check"
+computation -> "computation" | "calculation" | "determination"
+correspondence -> "correspondence" | "conjecture" | "theorem" | "result"
+fact -> "fact" | "truth" | "principle" | "law" | "theorem" | "rule" | "pattern"
+fact -> "structure" | "framework" | "edifice"
+
+thesame -> "the same" | "the very same" | "our very same" | "our" | "the exact same" | "a previously studied"
+
+beautiful -> "beautiful" | "surprising" | "elegant" | "pretty" | "arresting" | "charming"
+beautiful -> "simple" | "ingenious" | "sophisticated" | "intricate" | "elaborate" | "detailed"
+beautiful -> "confusing" | "bewildering" | "perplexing" | "elaborate" | "involved" | "complicated"
+beautiful -> "startling" | "unforseen" | "amazing" | "extraordinary" | "remarkable"
+beautiful -> "shocking" | "unexpected" | "deep" | "mysterious" | "profound" | "unsurprising"
+beautiful -> "essential" | "fundamental" | "crucial" | "critical" | "key" | "important"
+
+######## Statements & Sentences ########
+
+statement -> singsubject " " singstatementverb " " singsubject | pluralsubject " " pluralstatementverb " " subject
+statement -> singsubject " is " descriptivephysadj | pluralsubject " are " descriptivephysadj
+
+asentence -> 
+asentence -> asentence ", " qualifier
+asentence -> recently ", " muchwork " on " model
+asentence -> recently ", " muchwork " " studyingverb " " theory
+asentence -> recently ", " muchwork " on " model " " inorderto
+asentence -> recently ", " muchwork " " studyingverb " " theory " " inorderto
+asentence -> muchwork " " recently " on " model
+asentence -> muchwork " " recently " " studyingverb " " theory
+asentence -> recently ", work on " model " has opened up a " descriptivephysadj " class of " physadj " models"
+asentence -> recently ", " physicistname " " studiedverb " " subject
+asentence -> recently ", " physicistname " " verbed " that " statement
+asentence -> asentence ". we take a " descriptivephysadj " approach"
+asentence -> asentence ". " motivated ", " bsentence
+asentence -> singsubject " offers the possibility of " studyingverb " " subject
+asentence -> subject " " yields " a " beautiful " framework for " studyingverb " " subject
+asentence -> singsubject " is usually " verbed " " via " " subject
+asentence -> pluralsubject " are usually " verbed " " via " " subject
+
+bsentence -> 
+bsentence -> bsentence ", " qualifier
+bsentence -> inorderto ", " bsentence
+bsentence -> "we " studyverb " " subject
+bsentence -> "we solve " problem
+bsentence -> "we take a " descriptivephysadj " approach to " subject
+bsentence -> "we " prove " that " statement
+bsentence -> "we " prove " a " beautiful " correspondence between " subject " and " subject
+bsentence -> bsentence ", and " studyverb " " subject
+bsentence -> bsentence ", and " verb " that " statement
+bsentence -> bsentence ", and " verb " that, " qualifier ", " statement
+bsentence -> bsentence ", " thereby " " studyingverb " that " statement
+bsentence -> via " " studyingverb " " pluralmathconcept ", we " studyverb " " subject
+bsentence -> via " " studyingverb " " physconcept ", we " studyverb " " subject
+bsentence -> "we " verb " evidence for " subject
+bsentence -> "using the behavior of " singsubject ", we " studyverb " " subject
+bsentence -> "we present a criterion for " subject
+bsentence -> "we make contact with " subject ", " adverb " " studyingverb " " subject
+bsentence -> "we make contact between " subject " and " subject
+bsentence -> "we " studyverb " why " statement
+bsentence -> "we use " subject " to " studyverb " " subject
+bsentence -> "we use " subject ", together with " subject " to " studyverb " " subject
+bsentence -> "in this paper, " bsentence
+
+csentence -> 
+csentence -> csentence ", " qualifier
+csentence -> motivated ", " bsentence
+csentence -> "we take a " descriptivephysadj " approach"
+csentence -> adverb ", " statement
+csentence -> "next, " bsentence
+csentence -> singtheory " is also " studiedverb
+csentence -> pluraltheory " are also " studiedverb
+csentence -> singmodel " is also " studiedverb
+csentence -> pluralmodel " are also " studiedverb
+csentence -> singphysconcept " is also " studiedverb
+csentence -> pluralphysconcept " are also " studiedverb
+csentence -> "we " thereby " " prove " a " beautiful " correspondence between " subject " and " subject
+csentence -> "we also " verb " agreement with " subject
+csentence -> "the " computation " of " physconcept " localizes to " space
+csentence -> statement " " assuming " " statement
+csentence -> subject " " revealed " a " beautiful " " fact ": " statement
+csentence -> studyingverb " is made easier by " studyingverb " " subject
+csentence -> "our " computation " of " subject " " yields " " subject
+csentence -> "as an interesting outcome of this work for " subject ", " bsentence
+csentence -> csentence ", " studyingverb " " subject
+csentence -> adverb ", " singsubject " " singstatementverb " " thesame " " singmathconcept
+csentence -> "we therefore " contradict " a result of " physicistname " that " statement
+csentence -> "this probably " singstatementverb " " subject ", though we've been unable to " prove " a " correspondence
+csentence -> "this is most likely a result of " physsubject ", an observation first mentioned in work on " subject
+csentence -> "this " yields " an extremely precise " test " of " singphysconcept
+csentence -> "the " singmathconcept " depends, " adverb ", on whether " statement
+csentence -> "a " beautiful " part of this analysis " singstatementverb " " subject
+csentence -> "in this " correspondence ", " singsubject " makes a " beautiful " appearance"
+csentence -> "why this happens can be " studiedverb " by " studyingverb " " subject
+csentence -> "the title of this article refers to " subject
+csentence -> "we " verb " that " singtheoryobj " " singbeingverb " " qualifier
+csentence -> "this " correspondence " has long been understood in terms of " subject
+
+dsentence -> 
+dsentence -> dsentence ", " qualifier
+dsentence -> whenphrase ", we " verb " that " statement | statement
+dsentence -> whenphrase ", we " verb " that, " qualifier ", " statement
+dsentence -> dsentence ". " adverb ", " dsentence | "our results " prove " that " statement
+
+closing -> "finally, " bsentence
+closing -> adverb ", there is much to be done"
+closing -> "we hope this paper provides a good starting point for " studyingverb " " subject
+closing -> "we leave the rest for future study"
+closing -> adverb ", " singsubject " is beyond the scope of this paper"
+closing -> "we will provide more details in a future paper"
+closing -> "our results are similar to work done by " physicistname
+closing -> "we believe this is indicative of a " beautiful " " fact
+closing -> "given this, our work may seem quite " beautiful
+
+abstract -> 
+abstract -> asentence ". " bsentence ". " csentence ". " dsentence "."
+abstract -> asentence ". " adverb ", " asentence ". " bsentence ". " csentence ". " dsentence "."
+abstract -> asentence ". " bsentence ". " csentence ". " dsentence ". " closing "."
+abstract -> asentence ". " adverb ", " asentence ". " bsentence ". " csentence ". " dsentence ". " closing "."
+abstract -> statement ". " csentence ". " csentence ". " dsentence "."
+abstract -> statement ". " adverb ", " asentence ". " csentence ". " csentence ". " dsentence "."
+abstract -> statement ". " adverb ", " asentence ". " csentence ". " csentence ". " dsentence ". " closing "."
+abstract -> bsentence ". " csentence ". " adverb ", " asentence ". " csentence ". " csentence ". " dsentence "."
+abstract -> bsentence ". " csentence ". " dsentence ". " adverb ", " asentence ". " csentence ". " closing "."
+
+title -> subject | fancytitle | fancytitle
+fancytitle -> subject " and " subject | subject " and " subject
+fancytitle -> subject " and " subject
+fancytitle -> "from " subject " to " subject
+fancytitle -> subject " " verbed " " via " " pluralmathconcept | "towards " subject
+fancytitle -> subject " " via " " subject | subject " as " subject
+fancytitle -> studyingverb " " subject | studyingverb " " subject ": " subject
+fancytitle -> soladj " approaches to " problem
+fancytitle -> "why " pluralsubject " are " descriptivephysadj
+fancytitle -> studyingverb " " subject ": a " descriptivephysadj " approach"
+fancytitle -> "on " subject | "progress in " subject
+
+author -> capital ". " physicistname | capital ". " capital ". " physicistname
+#authors -> author | author ", " authors
+authors -> author | author ", " author | author ", " author ", " author | author ", " author ", " author ", " author
+
+morecomments -> smallinteger " figures" | "JHEP style" | "Latex file" | "no figures" | "BibTeX"
+morecomments -> "JHEP3" | "typos corrected" | nzdigit " tables" | "added refs" | "minor changes"
+morecomments -> "minor corrections" | "published in PRD" | "reference added" | "pdflatex"
+morecomments -> "based on a talk given on " physicistname "'s " nzdigit "0th birthday"
+morecomments -> "talk presented at the international " pluralphysconcept " workshop"
+comments -> smallinteger " pages" | comments ", " morecomments
+
+primarysubj -> "High Energy Physics - Theory (hep-th)" | "High Energy Physics - Phenomenology (hep-ph)"
+secondarysubj -> "Nuclear Theory (nucl-th)" | "Cosmology and Extragalactic Astrophysics (astro-ph.CO)"
+secondarysubj -> "General Relativity and Quantum Cosmology (gr-qc)" | "Statistical Mechanics (cond-mat.stat-mech)"
+papersubjects -> primarysubj | papersubjects "; " secondarysubj
+
+paper -> title " \\ " authors " \\ " comments " \\ " papersubjects " \\ " abstract
